@@ -1,0 +1,9 @@
+server:
+  port: 9999
+  http2:
+    enabled: true
+spring:
+  profiles:
+    active: ${profile:dev}
+  application:
+    name: Bigoo-Admin
