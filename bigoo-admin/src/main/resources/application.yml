@@ -1,7 +1,14 @@
+http:
+  port: 8888
 server:
   port: 9999
   http2:
     enabled: true
+  ssl:
+    key-alias: bigoo-shop
+    key-store: classpath:bigoo.keystore
+    key-store-password: bigoo-shop
+    key-store-type: PKCS12
 spring:
   profiles:
     active: ${profile:dev}

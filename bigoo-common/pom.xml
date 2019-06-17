@@ -12,14 +12,14 @@
     <artifactId>bigoo-common</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <description>Bigoo商城公共模块</description>
+    <description>Bigoo公共模块</description>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.20</version>
-            <scope>runtime</scope>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

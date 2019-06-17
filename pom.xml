@@ -2,25 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>com.jokey.bigoo</groupId>
+    <artifactId>bigoo</artifactId>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>bigoo-shop</module>
         <module>bigoo-common</module>
         <module>bigoo-admin</module>
     </modules>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.4.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.jokey.bigoo</groupId>
-    <artifactId>bigoo</artifactId>
-    <version>1.0.0</version>
-    <name>bigoo</name>
-    <description>Demo project for Spring Boot</description>
 
+    <!--依赖版本管理-->
     <properties>
+        <spring.boot.version>2.1.4.RELEASE</spring.boot.version>
         <java.version>1.8</java.version>
+        <guava.version>28.0-jre</guava.version>
+        <fastjson.version>1.2.58</fastjson.version>
+        <lombok.version>1.18.8</lombok.version>
+        <spring.version>5.1.8.RELEASE</spring.version>
+        <mybatis.starter.version>2.0.1</mybatis.starter.version>
+        <druid.starter.version>1.1.17</druid.starter.version>
+        <mysql.version>8.0.13</mysql.version>
     </properties>
 </project>
