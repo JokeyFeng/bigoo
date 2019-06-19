@@ -11,8 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @GetMapping("/user")
-    public Object get(){
-        return "{\"username\":\"123456\"}";
+    @GetMapping("/hello")
+    public Object get() {
+        return "{\"username\":\"hello\"}";
+    }
+
+    @GetMapping("/admin")
+    public Object admin() {
+        return "{\"username\":\"admin\"}";
     }
 }
