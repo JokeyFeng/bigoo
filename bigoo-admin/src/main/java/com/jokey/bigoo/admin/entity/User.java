@@ -1,6 +1,5 @@
 package com.jokey.bigoo.admin.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +15,9 @@ import java.util.List;
  */
 @Data
 public class User implements UserDetails {
+
+    private static final long serialVersionUID = 9050365665911965114L;
+
     /**
      * 用户id
      */
@@ -27,7 +29,6 @@ public class User implements UserDetails {
     /**
      * 密码
      */
-    @JsonIgnore
     private String password;
     /**
      * 性别 0男 1女

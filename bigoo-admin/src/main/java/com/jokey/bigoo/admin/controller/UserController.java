@@ -1,5 +1,8 @@
 package com.jokey.bigoo.admin.controller;
 
+import com.jokey.bigoo.mvc.RestResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,13 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @GetMapping("/hello")
-    public Object get() {
-        return "{\"username\":\"hello\"}";
+    @GetMapping("/user")
+    public RestResponse get() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        return RestResponse.success("{\"username\":\"hello\"}");
     }
 
     @GetMapping("/admin")
-    public Object admin() {
-        return "{\"username\":\"admin\"}";
+    public RestResponse admin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication.getName());
+        return RestResponse.success("{\"username\":\"admin\"}");
     }
 }
