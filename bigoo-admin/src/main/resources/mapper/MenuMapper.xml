@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jokey.bigoo.admin.mapper.MenuMapper">
+    <resultMap id="menu" type="com.jokey.bigoo.admin.entity.Menu">
+        <result column="menu_id" property="menuId" jdbcType="BIGINT"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="permission" property="permission"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="CHAR"/>
+        <result column="order_num" property="orderNum" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime"/>
+        <result column="modify_time" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        menu_id, parent_id, menu_name, url, permission, icon, type, order_num, create_time, modify_time
+    </sql>
+    <select id="findUserPermissions" resultMap="menu">
+        SELECT
+        m.permission
+        FROM
+        role r
+        LEFT JOIN user_role ur ON (r.role_id = ur.role_id)
+        LEFT JOIN `user` u ON (u.user_id = ur.user_id)
+        LEFT JOIN role_menu rm ON (rm.role_id = r.role_id)
+        LEFT JOIN menu m ON (m.menu_id = rm.menu_id)
+        WHERE
+        u.username = #{userName}
+        AND m.permission IS NOT NULL
+        AND m.permission <![CDATA[ <> ]]> ''
+    </select>
+</mapper>

@@ -1,12 +1,10 @@
 package com.jokey.bigoo.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Zhengjingfeng
@@ -14,7 +12,7 @@ import java.util.List;
  * comment
  */
 @Data
-public class User implements UserDetails {
+public class User implements Serializable {
 
     private static final long serialVersionUID = 9050365665911965114L;
 
@@ -53,6 +51,7 @@ public class User implements UserDetails {
     /**
      * 最近登录时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date lastLoginTime;
     /**
      * 主题
@@ -69,48 +68,30 @@ public class User implements UserDetails {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
     /**
      * 修改时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date modifyTime;
+
     /**
-     * 具备的权限
+     * 数据库字段
      */
-    private List<GrantedAuthority> authorities;
+    public static final String USERNAME = "username";
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.authorities;
-    }
+    /**
+     * 账户状态
+     */
+    public static final String STATUS_VALID = "1";
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
+    public static final String STATUS_LOCK = "0";
 
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
+    /**
+     * 性别
+     */
+    public static final String SEX_MALE = "0";
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+    public static final String SEX_FEMALE = "1";
 }

@@ -14,3 +14,12 @@ spring:
     active: ${profile:dev}
   application:
     name: Bigoo-Admin
+
+mybatis:
+  type-aliases-package: com.jokey.bigoo.admin.entity
+  mapper-locations: classpath:mapper/*.xml
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: false
+  row-bounds-with-count: true

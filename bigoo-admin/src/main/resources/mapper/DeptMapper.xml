@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jokey.bigoo.admin.mapper.DeptMapper">
+    <resultMap id="BaseResultMap" type="com.jokey.bigoo.admin.entity.Dept">
+        <result column="dept_id" property="deptId" jdbcType="BIGINT"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="dept_name" property="deptName" jdbcType="VARCHAR"/>
+        <result column="order_num" property="orderNum" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        dept_id, parent_id, dept_name, order_num, create_time
+    </sql>
+</mapper>

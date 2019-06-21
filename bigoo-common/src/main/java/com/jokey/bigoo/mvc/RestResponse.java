@@ -32,4 +32,11 @@ public class RestResponse<T> {
         response.setMessage(message);
         return response;
     }
+
+    public static <T> RestResponse<T> forbbiden() {
+        RestResponse<T> response = new RestResponse<>();
+        response.setCode(4000);
+        response.setMessage("没有权限");
+        return response;
+    }
 }

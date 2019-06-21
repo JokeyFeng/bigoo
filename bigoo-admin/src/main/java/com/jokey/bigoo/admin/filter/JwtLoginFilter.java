@@ -7,9 +7,9 @@ import com.jokey.bigoo.admin.entity.User;
 import com.jokey.bigoo.mvc.RestResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -47,14 +47,16 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse response) throws AuthenticationException, IOException {
+    @SneakyThrows
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse response) {
         User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
     }
 
     @Override
+    @SneakyThrows
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
-                                            FilterChain chain, Authentication authResult) throws IOException {
+                                            FilterChain chain, Authentication authResult) {
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
         StringBuilder as = new StringBuilder();
         for (GrantedAuthority authority : authorities) {
@@ -79,7 +81,21 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void unsuccessfulAuthentication(HttpServletRequest req, HttpServletResponse res, AuthenticationException failed) throws IOException {
         res.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter out = res.getWriter();
-        out.write(JSON.toJSONString(RestResponse.fail("登录失败")));
+        String notPassMsg = "登录失败";
+        if (failed instanceof BadCredentialsException) {
+            notPassMsg = "用户名或密码错误";
+        }
+        if (failed instanceof AccountExpiredException) {
+            notPassMsg = "账号已过期";
+        }
+
+        if (failed instanceof CredentialsExpiredException) {
+            notPassMsg = "登录令牌已过期";
+        }
+        if (failed instanceof LockedException) {
+            notPassMsg = "账号已冻结";
+        }
+        out.write(JSON.toJSONString(RestResponse.fail(notPassMsg)));
         out.flush();
         out.close();
     }

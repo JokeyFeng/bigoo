@@ -44,6 +44,12 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public int batchSave(List<? extends T> list) {
+        return getMapper().insertList(list);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public int delete(Object key) {
         return getMapper().deleteByPrimaryKey(key);
     }

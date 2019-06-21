@@ -11,6 +11,7 @@
         <module>bigoo-shop</module>
         <module>bigoo-common</module>
         <module>bigoo-admin</module>
+        <module>bigoo-security</module>
     </modules>
 
     <parent>
@@ -34,5 +35,6 @@
         <jwt.version>0.9.1</jwt.version>
         <pageHelper.version>1.2.12</pageHelper.version>
         <tk.mapper.version>2.1.5</tk.mapper.version>
+        <swagger.version>2.9.2</swagger.version>
     </properties>
 </project>

@@ -51,9 +51,7 @@ public class JwtFilter extends GenericFilterBean {
             chain.doFilter(req, response);
         } catch (ExpiredJwtException e) {
             this.response(response, RestResponse.fail("登录凭证已过期，请重新登录"));
-        } catch (UnsupportedJwtException e) {
-            e.printStackTrace();
-        } catch (SignatureException e) {
+        } catch (UnsupportedJwtException | SignatureException e) {
             this.response(response, RestResponse.fail("不合法的登录凭证，请重新登录"));
         }
     }
