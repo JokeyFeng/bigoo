@@ -3,6 +3,7 @@ package com.jokey.bigoo.admin.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigInteger;
 
@@ -19,14 +20,15 @@ public class Dict implements Serializable {
     /**
      * 字典ID
      */
+    @Id
     @ApiModelProperty("字典ID")
-    private BigInteger dictId;
+    private Long dictId;
 
     /**
      * 键
      */
     @ApiModelProperty("键")
-    private BigInteger key;
+    private Long key;
 
     /**
      * 值

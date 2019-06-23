@@ -3,8 +3,10 @@ package com.jokey.bigoo.admin.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -20,14 +22,15 @@ public class Dept implements Serializable {
     /**
      * 部门ID
      */
+    @Id
     @ApiModelProperty("部门ID")
-    private BigInteger deptId;
+    private Long deptId;
 
     /**
      * 上级部门ID
      */
     @ApiModelProperty("上级部门ID")
-    private BigInteger parentId;
+    private Long parentId;
 
     /**
      * 部门名称
@@ -39,12 +42,12 @@ public class Dept implements Serializable {
      * 排序
      */
     @ApiModelProperty("排序")
-    private BigInteger orderNum;
+    private Long orderNum;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private Timestamp createTime;
+    private Date createTime;
 
 }

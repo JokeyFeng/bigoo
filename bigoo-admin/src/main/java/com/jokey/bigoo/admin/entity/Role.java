@@ -3,8 +3,10 @@ package com.jokey.bigoo.admin.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -20,6 +22,7 @@ public class Role implements Serializable {
     /**
      * 角色ID
      */
+    @Id
     @ApiModelProperty("角色ID")
     private BigInteger roleId;
 
@@ -39,12 +42,12 @@ public class Role implements Serializable {
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private Timestamp createTime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
     @ApiModelProperty("修改时间")
-    private Timestamp modifyTime;
+    private Date modifyTime;
 
 }

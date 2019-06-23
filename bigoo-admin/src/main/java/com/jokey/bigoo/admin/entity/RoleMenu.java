@@ -20,12 +20,12 @@ public class RoleMenu implements Serializable {
      * 角色ID
      */
     @ApiModelProperty("角色ID")
-    private BigInteger roleId;
+    private Long roleId;
 
     /**
      * 菜单/按钮ID
      */
     @ApiModelProperty("菜单/按钮ID")
-    private BigInteger menuId;
+    private Long menuId;
 
 }

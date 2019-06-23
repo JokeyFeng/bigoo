@@ -3,9 +3,11 @@ package com.jokey.bigoo.admin.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * @author :jokey
@@ -20,14 +22,15 @@ public class Menu implements Serializable {
     /**
      * 菜单/按钮ID
      */
+    @Id
     @ApiModelProperty("菜单/按钮ID")
-    private BigInteger menuId;
+    private Long menuId;
 
     /**
      * 上级菜单ID
      */
     @ApiModelProperty("上级菜单ID")
-    private BigInteger parentId;
+    private Long parentId;
 
     /**
      * 菜单/按钮名称
@@ -63,18 +66,18 @@ public class Menu implements Serializable {
      * 排序
      */
     @ApiModelProperty("排序")
-    private BigInteger orderNum;
+    private Long orderNum;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private Timestamp createTime;
+    private Date createTime;
 
     /**
      * 修改时间
      */
     @ApiModelProperty("修改时间")
-    private Timestamp modifyTime;
+    private Date modifyTime;
 
 }

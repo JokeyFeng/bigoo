@@ -1,6 +1,10 @@
 package com.jokey.bigoo.admin.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -10,9 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  *
  * @author Zhengjingfeng
  * created 2019/6/17 15:56
- * comment
+ * comment 使用security后，这样配置跨域已失效。请移步到 WebSecurityConfig
  */
-@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     /**
@@ -24,9 +27,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("*")
-                .allowCredentials(true)
-                .allowedMethods("OPTION", "GET", "POST", "DELETE", "PUT")
-                .maxAge(3600);
+                .allowedMethods("PUT", "DELETE", "GET", "POST", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("access-control-allow-headers",
+                        "access-control-allow-methods",
+                        "access-control-allow-origin",
+                        "access-control-max-age",
+                        "X-Frame-Options")
+                .allowCredentials(true).maxAge(3600);
     }
 
     /**

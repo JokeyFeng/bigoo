@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
  * created 2019/6/17 15:53
  * comment
  */
-@Configuration
+//@Configuration
 public class HttpToHttps {
 
     @Value("${http.port}")

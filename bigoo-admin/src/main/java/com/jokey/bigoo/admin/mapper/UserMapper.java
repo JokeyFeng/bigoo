@@ -15,12 +15,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface UserMapper extends MyMapper<User> {
 
-    /**
-     * 通过账号查询用户
-     *
-     * @param username
-     * @return
-     */
-    User getUserByUsername(@Param("username") String username);
 
 }

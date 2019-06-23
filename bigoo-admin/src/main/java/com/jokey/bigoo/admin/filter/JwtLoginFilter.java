@@ -2,12 +2,18 @@ package com.jokey.bigoo.admin.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.jokey.bigoo.admin.entity.BigooUserDetail;
 import com.jokey.bigoo.admin.entity.User;
 import com.jokey.bigoo.mvc.RestResponse;
+import com.jokey.bigoo.util.DateUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.SneakyThrows;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -22,8 +28,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-import java.util.Date;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Zhengjingfeng
@@ -58,23 +65,36 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication authResult) {
         Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-        StringBuilder as = new StringBuilder();
-        for (GrantedAuthority authority : authorities) {
-            as.append(authority.getAuthority())
-                    .append(",");
-        }
-        //配置用户角色
+        List<String> permissions = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        //配置用户角色、token存活时长等
+        Date date = new Date(Instant.now().toEpochMilli() + 10 * 60 * 1000);
+        String expireTime = DateUtil.formatFullTime(date);
         String jwt = Jwts.builder()
-                .claim("authorities", as)
+                .claim("authorities", Joiner.on(',').skipNulls().join(permissions))
                 .setSubject(authResult.getName())
-                .setExpiration(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                .setExpiration(date)
                 .signWith(SignatureAlgorithm.HS512, "jokey.bingo.com")
                 .compact();
+
+        Map<String, Object> map = Maps.newHashMap();
+        map.put("expireTime", expireTime);
+        map.put("token", jwt);
+        map.put("permissions", permissions);
+        this.get(authResult, map);
+
         res.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter out = res.getWriter();
-        out.write(JSON.toJSONString(RestResponse.success(ImmutableMap.of("token", jwt))));
+        out.write(JSON.toJSONString(RestResponse.success(map)));
         out.flush();
         out.close();
+    }
+
+    private void get(Authentication authResult, Map<String, Object> map) {
+        BigooUserDetail userDetail = (BigooUserDetail) authResult.getPrincipal();
+        User user = new User();
+        BeanUtils.copyProperties(userDetail, user);
+        user.setPassword("it's a secret!");
+        map.put("user", user);
     }
 
     @Override
@@ -90,10 +110,10 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         }
 
         if (failed instanceof CredentialsExpiredException) {
-            notPassMsg = "登录令牌已过期";
+            notPassMsg = "登录凭证已过期";
         }
         if (failed instanceof LockedException) {
-            notPassMsg = "账号已冻结";
+            notPassMsg = "账号已被冻结";
         }
         out.write(JSON.toJSONString(RestResponse.fail(notPassMsg)));
         out.flush();

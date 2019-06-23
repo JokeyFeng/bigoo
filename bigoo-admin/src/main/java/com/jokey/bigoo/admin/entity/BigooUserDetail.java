@@ -1,5 +1,6 @@
 package com.jokey.bigoo.admin.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jokey.bigoo.enu.LoginType;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * @author Zhengjingfeng
@@ -26,7 +28,7 @@ public class BigooUserDetail extends User implements Serializable {
 
     private String avatar;
 
-    private Long userId;
+    private long userId;
 
     private String email;
 
@@ -36,13 +38,26 @@ public class BigooUserDetail extends User implements Serializable {
 
     private String password;
 
-    private String loginTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date lastLoginTime;
 
-    public BigooUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    private long deptId;
+
+    private String deptName;
+
+    private transient String roleId;
+
+    private transient String roleName;
+
+    public BigooUserDetail(String username, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
     }
 
-    public BigooUserDetail(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public BigooUserDetail(String username, String password,
+                           boolean enabled, boolean accountNonExpired,
+                           boolean credentialsNonExpired, boolean accountNonLocked,
+                           Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
     }
 }
