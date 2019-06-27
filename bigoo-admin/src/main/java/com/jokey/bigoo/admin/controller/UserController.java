@@ -3,6 +3,7 @@ package com.jokey.bigoo.admin.controller;
 import com.github.pagehelper.PageInfo;
 import com.jokey.bigoo.admin.entity.User;
 import com.jokey.bigoo.admin.service.UserService;
+import com.jokey.bigoo.admin.vo.RegisterVo;
 import com.jokey.bigoo.mvc.BaseController;
 import com.jokey.bigoo.mvc.Page;
 import com.jokey.bigoo.mvc.RestResponse;
@@ -12,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,6 +51,13 @@ public class UserController extends BaseController {
     @ApiImplicitParam(name = "user", value = "用户表", paramType = "body", dataType = "User")
     public RestResponse insert(@RequestBody User user) {
         return RestResponse.success(userService.save(user));
+    }
+
+    @PostMapping("/register")
+    @ApiOperation("注册账号")
+    @ApiImplicitParam(name = "register", value = "账号注册", paramType = "body", dataType = "RegisterVo")
+    public RestResponse register(@Validated @RequestBody RegisterVo register) {
+        return RestResponse.success(userService.register(register));
     }
 
     @DeleteMapping("/ids")

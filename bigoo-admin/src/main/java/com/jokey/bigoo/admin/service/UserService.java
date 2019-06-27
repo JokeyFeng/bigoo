@@ -1,6 +1,7 @@
 package com.jokey.bigoo.admin.service;
 
 import com.jokey.bigoo.admin.entity.User;
+import com.jokey.bigoo.admin.vo.RegisterVo;
 import com.jokey.bigoo.mvc.BaseService;
 
 /**
@@ -16,4 +17,12 @@ public interface UserService extends BaseService<User> {
      * @return
      */
     User findUserByUsername(String username);
+
+    /**
+     * 注册账号
+     *
+     * @param register
+     * @return
+     */
+    int register(RegisterVo register);
 }

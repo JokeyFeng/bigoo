@@ -4,9 +4,7 @@ import com.jokey.bigoo.admin.entity.BigooUserDetail;
 import com.jokey.bigoo.admin.entity.User;
 import com.jokey.bigoo.admin.service.MenuService;
 import com.jokey.bigoo.admin.service.UserService;
-import com.jokey.bigoo.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,7 +61,7 @@ public class CustomUserService implements UserDetailsService {
         userDetail.setRoleId(user.getRoleId());
         userDetail.setRoleName(user.getRoleName());
         userDetail.setLastLoginTime(new Date());
-        //TODO 更新last_login_time字段值
+        //更新last_login_time字段值
         user.setLastLoginTime(new Date());
         userService.updateNotNull(user);
         return userDetail;

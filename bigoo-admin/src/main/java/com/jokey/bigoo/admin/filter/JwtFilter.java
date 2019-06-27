@@ -1,11 +1,10 @@
 package com.jokey.bigoo.admin.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.jokey.bigoo.mvc.ResponseEnum;
 import com.jokey.bigoo.mvc.RestResponse;
 import io.jsonwebtoken.*;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -37,9 +36,8 @@ public class JwtFilter extends GenericFilterBean {
         HttpServletRequest req = (HttpServletRequest) request;
         String jwtToken = req.getHeader("authorization");
         if (StringUtils.isEmpty(jwtToken) || "null".equals(jwtToken) || "undefined".equals(jwtToken)) {
-            this.response(response, RestResponse.fail("请登录再访问"));
+            this.response(response, RestResponse.fail(ResponseEnum.NEED_LOGIN));
         }
-        System.out.println(jwtToken);
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey("jokey.bingo.com")
@@ -52,13 +50,15 @@ public class JwtFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(token);
             chain.doFilter(req, response);
         } catch (ExpiredJwtException e) {
-            throw new CredentialsExpiredException("");
+            this.response(response, RestResponse.fail(ResponseEnum.CREDENTIAL_EXPIRED));
         } catch (UnsupportedJwtException | SignatureException e) {
-            this.response(response, RestResponse.fail("不合法的登录凭证，请重新登录"));
+            this.response(response, RestResponse.fail(ResponseEnum.ILLEGAL_CREDENTIAL));
         }
     }
 
     /**
+     * 构造响应信息
+     *
      * @param response
      * @param restResponse
      * @throws IOException

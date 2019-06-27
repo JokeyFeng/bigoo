@@ -2,15 +2,15 @@ package com.jokey.bigoo.admin.config;
 
 import com.jokey.bigoo.admin.filter.JwtFilter;
 import com.jokey.bigoo.admin.filter.JwtLoginFilter;
-import org.springframework.context.annotation.Bean;
+import com.jokey.bigoo.admin.service.impl.CustomUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -26,11 +26,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
+    /* @Bean
+     PasswordEncoder passwordEncoder() {
+         return new BCryptPasswordEncoder();
+     }*/
 
+    @Autowired
+    private CustomUserService customUserService;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserService).passwordEncoder(new BCryptPasswordEncoder());
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,17 +45,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .configurationSource(this.corsConfigurationSource());
         http.authorizeRequests()
                 //让Spring Security放行所有跨域预检请求
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .addFilterBefore(
                         new JwtLoginFilter("/login", super.authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(
-                        new JwtFilter(),
-                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable();
+    }
+
+    /**
+     * 免登录认证资源url
+     *
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v1/user/register");
     }
 
     /**

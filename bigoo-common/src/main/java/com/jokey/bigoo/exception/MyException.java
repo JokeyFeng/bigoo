@@ -1,6 +1,6 @@
 package com.jokey.bigoo.exception;
 
-import lombok.AllArgsConstructor;
+import com.jokey.bigoo.mvc.ResponseEnum;
 import lombok.Data;
 
 /**
@@ -9,8 +9,10 @@ import lombok.Data;
  * comment
  */
 @Data
-@AllArgsConstructor
 public class MyException extends RuntimeException {
+
+    private static final long serialVersionUID = 3745209773495636297L;
+
     /**
      * 错误编码
      */
@@ -19,5 +21,11 @@ public class MyException extends RuntimeException {
      * 错误信息
      */
     private String errorMessage;
+
+    public MyException(ResponseEnum resq) {
+        super();
+        this.errorCode = resq.getCode();
+        this.errorMessage = resq.getMessage();
+    }
 
 }

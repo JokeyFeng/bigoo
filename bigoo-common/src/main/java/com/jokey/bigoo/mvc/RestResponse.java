@@ -2,6 +2,7 @@ package com.jokey.bigoo.mvc;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zhengjingfeng
@@ -20,23 +21,30 @@ public class RestResponse<T> {
 
     public static <T> RestResponse<T> success(T data) {
         RestResponse<T> response = new RestResponse<>();
-        response.setCode(200);
-        response.setMessage("成功");
+        response.setCode(ResponseEnum.SUCCESS.getCode());
+        response.setMessage(ResponseEnum.SUCCESS.getMessage());
         response.setData(data);
         return response;
     }
 
-    public static <T> RestResponse<T> fail(String message) {
-        RestResponse<T> response = new RestResponse<>();
-        response.setCode(-1);
-        response.setMessage(message);
+    public static RestResponse success() {
+        RestResponse response = new RestResponse<>();
+        response.setCode(ResponseEnum.SUCCESS.getCode());
+        response.setMessage(ResponseEnum.SUCCESS.getMessage());
         return response;
     }
 
-    public static <T> RestResponse<T> forbbiden() {
-        RestResponse<T> response = new RestResponse<>();
-        response.setCode(4000);
-        response.setMessage("没有权限");
+    public static RestResponse fail(ResponseEnum resp) {
+        RestResponse response = new RestResponse<>();
+        response.setCode(resp.getCode());
+        response.setMessage(resp.getMessage());
+        return response;
+    }
+
+    public static RestResponse createResp(@NonNull Integer code, @NonNull String message) {
+        RestResponse response = new RestResponse<>();
+        response.setCode(code);
+        response.setMessage(message);
         return response;
     }
 }

@@ -3,11 +3,9 @@ package com.jokey.bigoo.admin.filter;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.jokey.bigoo.admin.entity.BigooUserDetail;
 import com.jokey.bigoo.admin.entity.User;
+import com.jokey.bigoo.mvc.ResponseEnum;
 import com.jokey.bigoo.mvc.RestResponse;
 import com.jokey.bigoo.util.DateUtil;
 import io.jsonwebtoken.Jwts;
@@ -29,7 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +81,9 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         map.put("expireTime", expireTime);
         map.put("token", jwt);
         map.put("permissions", permissions);
-        this.get(authResult, map);
+        User user = new User();
+        BeanUtils.copyProperties(authResult.getPrincipal(), user);
+        map.put("user", user);
 
         res.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter out = res.getWriter();
@@ -89,33 +92,25 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         out.close();
     }
 
-    private void get(Authentication authResult, Map<String, Object> map) {
-        BigooUserDetail userDetail = (BigooUserDetail) authResult.getPrincipal();
-        User user = new User();
-        BeanUtils.copyProperties(userDetail, user);
-        user.setPassword("it's a secret!");
-        map.put("user", user);
-    }
-
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest req, HttpServletResponse res, AuthenticationException failed) throws IOException {
         res.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter out = res.getWriter();
-        String notPassMsg = "登录失败";
+        ResponseEnum resp = ResponseEnum.FAIL;
         if (failed instanceof BadCredentialsException) {
-            notPassMsg = "用户名或密码错误";
+            resp = ResponseEnum.BAD_CREDENTIAL;
         }
         if (failed instanceof AccountExpiredException) {
-            notPassMsg = "账号已过期";
+            resp = ResponseEnum.ACCOUNT_EXPIRED;
         }
-
         if (failed instanceof CredentialsExpiredException) {
-            notPassMsg = "登录凭证已过期";
+            resp = ResponseEnum.CREDENTIAL_EXPIRED;
         }
         if (failed instanceof LockedException) {
-            notPassMsg = "账号已被冻结";
+            resp = ResponseEnum.ACCOUNT_LOCKED;
         }
-        out.write(JSON.toJSONString(RestResponse.fail(notPassMsg)));
+
+        out.write(JSON.toJSONString(RestResponse.fail(resp)));
         out.flush();
         out.close();
     }
