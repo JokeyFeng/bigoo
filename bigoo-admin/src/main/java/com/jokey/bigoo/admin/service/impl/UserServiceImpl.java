@@ -52,6 +52,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         user.setUsername(register.getUsername());
         user.setPassword(encodePassword);
         user.setStatus((byte) 1);
+        user.setSex((byte) -1);
+        user.setDeptId(-1L);
         user.setCreateTime(new Date());
         return super.save(user);
     }

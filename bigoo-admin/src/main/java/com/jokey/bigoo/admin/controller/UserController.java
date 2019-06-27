@@ -23,6 +23,7 @@ import java.util.List;
  * Date 2019年6月21日
  * Version 1.0
  */
+@CrossOrigin("*")
 @RestController
 @Api(tags = "用户表")
 @RequestMapping(value = "/v1/user", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

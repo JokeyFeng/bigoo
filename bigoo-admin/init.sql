@@ -3,8 +3,8 @@ CREATE TABLE `user` (
   `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `username` varchar(50) NOT NULL COMMENT '用户名',
   `password` varchar(128) NOT NULL COMMENT '密码',
-  `sex` tinyint(1) DEFAULT NULL COMMENT '性别 0男 1女',
-  `dept_id` bigint(20) DEFAULT NULL COMMENT '部门ID',
+  `sex` tinyint(1) DEFAULT '-1' COMMENT '性别 -1未知 0男 1女',
+  `dept_id` bigint(20) DEFAULT '-1' COMMENT '部门ID',
   `email` varchar(128) DEFAULT NULL COMMENT '邮箱',
   `mobile` varchar(20) DEFAULT NULL COMMENT '联系电话',
   `status` tinyint(1) NOT NULL COMMENT '状态 0锁定 1有效',
@@ -15,7 +15,7 @@ CREATE TABLE `user` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `modify_time` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=171 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 
 INSERT INTO `test_01`.`user` (`user_id`, `username`, `password`, `sex`, `dept_id`, `email`, `mobile`, `status`, `last_login_time`, `theme`, `avatar`, `description`, `create_time`, `modify_time`) VALUES ('1', 'jokey', '123456', '1', '1', '976024396@qq.com', '15625162363', '1', '2019-06-21 17:56:48', NULL, NULL, '我是帅锅', '2019-06-21 10:26:33', '2019-06-21 10:26:36');
 

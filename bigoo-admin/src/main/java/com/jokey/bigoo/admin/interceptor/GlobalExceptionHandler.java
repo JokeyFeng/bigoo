@@ -25,13 +25,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MyException.class)
     public RestResponse handle(MyException e) {
-        e.printStackTrace();
         return RestResponse.createResp(e.getErrorCode(), e.getErrorMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public RestResponse handle(AccessDeniedException e) {
-        e.printStackTrace();
         return RestResponse.fail(ResponseEnum.FORBIDDEN);
     }
 }
