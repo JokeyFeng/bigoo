@@ -20,6 +20,7 @@ import java.util.List;
  * Date 2019年6月21日
  * Version 1.0
  */
+@CrossOrigin("*")
 @RestController
 @Api(tags = "字典表")
 @RequestMapping(value = "/v1/dict", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -57,4 +57,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         user.setCreateTime(new Date());
         return super.save(user);
     }
+
+    @Override
+    public boolean isExistUser(String username) {
+        User user = this.findUserByUsername(username);
+        return user != null;
+    }
 }

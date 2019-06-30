@@ -75,4 +75,11 @@ public class UserController extends BaseController {
     public RestResponse update(@RequestBody User user) {
         return RestResponse.success(userService.updateNotNull(user));
     }
+
+    @GetMapping("/exist")
+    @ApiOperation("根据ID查询")
+    @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", dataType = "String")
+    public RestResponse<Boolean> isExist(@RequestParam String username) {
+        return RestResponse.success(userService.isExistUser(username));
+    }
 }

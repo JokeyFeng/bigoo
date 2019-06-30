@@ -25,4 +25,12 @@ public interface UserService extends BaseService<User> {
      * @return
      */
     int register(RegisterVo register);
+
+    /**
+     * 用户是否存在
+     *
+     * @param username
+     * @return true表示存在 false表示不存在
+     */
+    boolean isExistUser(String username);
 }
